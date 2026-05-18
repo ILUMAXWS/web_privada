@@ -1,0 +1,26 @@
+{
+  "session_secret": "reemplaza-esta-clave-larga",
+  "email": {
+    "enabled": true,
+    "smtp_host": "smtp.tudominio.com",
+    "smtp_port": 587,
+    "smtp_user": "usuario-smtp",
+    "smtp_password": "",
+    "from_email": "no-reply@ilumax.es",
+    "from_name": "ILUMAX",
+    "use_ssl": false,
+    "use_tls": true,
+    "tls_verify": true
+  },
+  "reset_tokens": {},
+  "users": {
+    "admin": {
+      "password_hash": "pbkdf2_sha256$240000$REEMPLAZA_SALT_BASE64$REEMPLAZA_HASH_BASE64",
+      "email": "admin@ilumax.es",
+      "role": "admin",
+      "active": true,
+      "created_at": 0,
+      "updated_at": 0
+    }
+  }
+}

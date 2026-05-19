@@ -29,7 +29,7 @@ def password_hash(password: str) -> str:
 
 def load_existing_config() -> dict:
     if CONFIG_PATH.exists():
-        with CONFIG_PATH.open("r", encoding="utf-8") as handle:
+        with CONFIG_PATH.open("r", encoding="utf-8-sig") as handle:
             config = json.load(handle)
     else:
         config = {}
@@ -79,24 +79,25 @@ def load_existing_config() -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Actualiza o crea un usuario administrador.")
     parser.add_argument("username", nargs="?", help="Usuario")
-    parser.add_argument("password", nargs="?", help="Contraseña")
+    parser.add_argument("password", nargs="?", help="Contrasena")
     parser.add_argument("--email", help="Email asociado al usuario")
     args = parser.parse_args()
 
     username = args.username or input("Usuario: ").strip()
-    password = args.password or getpass("Contraseña: ")
+    password = args.password or getpass("Contrasena: ")
     email = args.email or input("Email: ").strip()
 
     if not username:
-        raise SystemExit("El usuario no puede estar vacío.")
+        raise SystemExit("El usuario no puede estar vacio.")
     if not EMAIL_PATTERN.fullmatch(email):
-        raise SystemExit("Introduce un email válido.")
+        raise SystemExit("Introduce un email valido.")
     if len(password) < 10:
-        raise SystemExit("Usa una contraseña de al menos 10 caracteres.")
+        raise SystemExit("Usa una contrasena de al menos 10 caracteres.")
 
     config = load_existing_config()
     config["session_secret"] = config.get("session_secret") or secrets.token_urlsafe(32)
     config.setdefault("users", {})
+    config.setdefault("email", {})["smtp_password"] = ""
 
     now = int(time.time())
     existing = config["users"].get(username, {})

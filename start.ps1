@@ -1,3 +1,7 @@
+param(
+  [switch]$NoPrompt
+)
+
 $ErrorActionPreference = "Stop"
 
 $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -23,6 +27,10 @@ if (Test-Path $configPath) {
   $needsSmtpPassword = $emailEnabled -and $config.email.smtp_user -and -not $config.email.smtp_password -and -not $env:PRIVATE_WEB_SMTP_PASSWORD
 
   if ($needsSmtpPassword) {
+    if ($NoPrompt) {
+      throw "PRIVATE_WEB_SMTP_PASSWORD no esta configurada. En produccion define esta variable como secreto del servicio antes de arrancar."
+    }
+
     $securePassword = Read-Host "Contraseña SMTP para $($config.email.smtp_user)" -AsSecureString
     $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePassword)
     try {

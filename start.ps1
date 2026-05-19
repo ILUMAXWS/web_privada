@@ -84,4 +84,9 @@ if (Test-Path $configPath) {
   }
 }
 
-& $python (Join-Path $projectRoot "server.py")
+$launcherPath = Join-Path $projectRoot "tools\run_server.py"
+if (Test-Path $launcherPath) {
+  & $python $launcherPath
+} else {
+  & $python (Join-Path $projectRoot "server.py")
+}

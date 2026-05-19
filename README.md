@@ -1,6 +1,6 @@
 # Web privada
 
-Web local con login de usuario y contraseña, sesiones firmadas con cookie HTTP-only y panel privado para gestionar usuarios.
+Web local con login de usuario y contrasena, sesiones firmadas con cookie HTTP-only y panel privado para gestionar usuarios.
 
 ## Arrancar
 
@@ -16,26 +16,26 @@ Luego abre:
 http://127.0.0.1:8000
 ```
 
-Configura el primer administrador en local con `tools/set_credentials.py` antes de usar la web en producción.
+Configura el primer administrador en local con `tools/set_credentials.py` antes de usar la web en produccion.
 
-## Gestión de usuarios
+## Gestion de usuarios
 
-Entra como `admin` y abre la zona privada. Desde ahí puedes:
+Entra como `admin` y abre la zona privada. Desde ahi puedes:
 
-- Añadir usuarios.
+- Anadir usuarios.
 - Asociar y actualizar el email de cada usuario.
 - Asignar rol de usuario o administrador.
-- Cambiar tu propia contraseña.
-- Enviar emails de restablecimiento de contraseña.
+- Cambiar tu propia contrasena.
+- Enviar emails de restablecimiento de contrasena.
 - Activar, desactivar o eliminar cuentas.
 
-Las contraseñas se guardan como hashes PBKDF2 en `config.local.json`; no se almacenan en texto plano.
+Las contrasenas se guardan como hashes PBKDF2 en `config.local.json`; no se almacenan en texto plano.
 
-## Recuperación por email
+## Recuperacion por email
 
-En el login, usa `¿Has olvidado tu contraseña?`. La web pedirá el email asociado al usuario y enviará un enlace válido durante 1 hora.
+En el login, usa `Has olvidado tu contrasena?`. La web pedira el email asociado al usuario y enviara un enlace valido durante 1 hora.
 
-Para envío real, configura `email` en `config.local.json`:
+Para envio real, configura `email` en `config.local.json`:
 
 ```json
 {
@@ -53,13 +53,21 @@ Para envío real, configura `email` en `config.local.json`:
 }
 ```
 
-Deja `smtp_password` vacío. `start.ps1` pedirá la contraseña SMTP en oculto al arrancar y la pasará al servidor solo como variable de entorno de esa sesión.
+Deja `smtp_password` vacio. `start.ps1` no pide contrasenas al arrancar: lee `PRIVATE_WEB_SMTP_PASSWORD` si existe o, en Windows local, el secreto cifrado `secrets\smtp_password.dpapi`.
 
-Si `enabled` está en `false`, los emails se guardan como `.eml` en la carpeta `outbox/` para pruebas locales.
+Si necesitas crear o renovar ese secreto local, ejecuta una vez:
 
-## Producción
+```powershell
+.\tools\save_smtp_secret.ps1
+```
 
-En producción no uses el prompt interactivo. Configura `PRIVATE_WEB_SMTP_PASSWORD` como secreto o variable de entorno del servidor y arranca con:
+El archivo queda cifrado con DPAPI de maquina local y esta ignorado por Git.
+
+Si `enabled` esta en `false`, los emails se guardan como `.eml` en la carpeta `outbox/` para pruebas locales.
+
+## Produccion
+
+En produccion configura `PRIVATE_WEB_SMTP_PASSWORD` como secreto o variable de entorno del servidor y arranca con:
 
 ```powershell
 .\start.ps1 -NoPrompt
@@ -69,12 +77,12 @@ Consulta `docs/PRODUCCION.md` para las variables necesarias y opciones de servic
 
 ## Cambiar credenciales desde terminal
 
-Con el servidor detenido, puedes actualizar o crear un administrador así:
+Con el servidor detenido, puedes actualizar o crear un administrador asi:
 
 ```powershell
-& "$env:USERPROFILE\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" .\tools\set_credentials.py nuevo_usuario nueva_contraseña --email usuario@dominio.com
+& "$env:USERPROFILE\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" .\tools\set_credentials.py nuevo_usuario nueva_contrasena --email usuario@dominio.com
 ```
 
-Después reinicia el servidor.
+Despues reinicia el servidor.
 
-`config.local.json` está en `.gitignore` para evitar publicar secretos por accidente.
+`config.local.json`, `secrets\` y `.env` estan en `.gitignore` para evitar publicar secretos por accidente.

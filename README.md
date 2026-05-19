@@ -57,6 +57,16 @@ Deja `smtp_password` vacío. `start.ps1` pedirá la contraseña SMTP en oculto a
 
 Si `enabled` está en `false`, los emails se guardan como `.eml` en la carpeta `outbox/` para pruebas locales.
 
+## Producción
+
+En producción no uses el prompt interactivo. Configura `PRIVATE_WEB_SMTP_PASSWORD` como secreto o variable de entorno del servidor y arranca con:
+
+```powershell
+.\start.ps1 -NoPrompt
+```
+
+Consulta `docs/PRODUCCION.md` para las variables necesarias y opciones de servicio persistente.
+
 ## Cambiar credenciales desde terminal
 
 Con el servidor detenido, puedes actualizar o crear un administrador así:

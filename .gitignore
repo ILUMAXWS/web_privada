@@ -2,3 +2,8 @@ __pycache__/
 config.local.json
 server.*.log
 outbox/
+.env
+.env.*
+!.env.example
+!.env.*.example
+secrets/
